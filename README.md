@@ -42,4 +42,4 @@ story analysis features.
 2. Install the requirements
 3. Run:
 
-streamlit run app.py
+python -m streamlit run app.py
