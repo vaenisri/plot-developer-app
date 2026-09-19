@@ -72,7 +72,7 @@ if page == "Character Builder":
     if st.session_state.step < len(questions):
         current_question = questions[st.session_state.step]
 
-        with st.form(key=f"question_form_{st.session_state.step}"):
+        with st.form(key="question_form"):
             answer = st.text_input(current_question["prompt"])
             submitted = st.form_submit_button("Next")
 
@@ -156,12 +156,15 @@ elif page == "Beats":
                         st.write("**Cost:**", b["cost"])
                         st.write("---")
 
+                        
+                    trait_type = st.radio("What kind of beat is this?", ["Flaw", "Strength", "External"], key=f"trait_{stage}")
+                    response_to_trigger = ""
+                    if trait_type == "External":
+                        response_to_trigger = st.text_input("This is outside the character's control - what does the character DO about it?", key=f"response_{stage}")
+
                     with st.form(key=f"beat_form_{stage}"):
                         chosen_name = st.selectbox("Which character?", names, key=f"name_{stage}")
-                        trait_type = st.radio("What kind of beat is this?", ["Flaw", "Strength", "External"], key=f"trait_{stage}")
-                        response_to_trigger = ""
-                        if trait_type == "External":
-                            response_to_trigger = st.text_input("This is outside the character's control - what does the character DO about it?", key=f"response_{stage}")
+                        
                         beat_title = st.text_input("Briefly explain what happens in this beat.", key=f"title_{stage}")
                         cost = st.slider("How much is this beat costing the character? (1=low stakes, 10=devastating)", 1, 10, key=f"cost_{stage}")
                         submitted = st.form_submit_button("Save beat")
