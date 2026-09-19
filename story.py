@@ -289,39 +289,131 @@ if page == "Character Builder":
         "flaw": st.session_state.answers["flaw"],
         "misbelief": st.session_state.answers["misbelief"],
         "strength": st.session_state.answers["strength"],
-    }
+        }
 
-    st.session_state.characters.append(character)
+        st.session_state.characters.append(character)
 
-    st.success("Character saved!")
+        st.success("Character saved!")
 
 elif page== "Characters":
 
-    st.subheader("Your Characters")
-    for c in st.session_state.characters:
-        st.markdown(f"""
+    st.title("Character Core")
+
+    st.caption("YOU'VE BUILT THE FOUNDATION")
+
+    st.markdown(f"""
     <div class="story-card">
 
-    <div class="story-label">CHARACTER</div>
+        <div class="story-label">YOUR CHARACTER</div>
 
-    <h2>{c["name"]}</h2>
+        <h2>{st.session_state.answers["name"]}</h2>
 
-    <hr>
-
-    <p><b>Wound</b><br>
-    {c["wound"]}</p>
-
-    <p><b>Flaw</b><br>
-    {c["flaw"]}</p>
-
-    <p><b>Misbelief</b><br>
-    {c["misbelief"]}</p>
-
-    <p><b>Strength</b><br>
-    {c["strength"]}</p>
+        <p style="font-size:17px; line-height:1.6;">
+            Your character's experiences, flaws, beliefs, and strengths
+            are connected. Here's the chain you've created.
+        </p>
 
     </div>
     """, unsafe_allow_html=True)
+
+    st.markdown(f"""
+    <div class="story-card">
+
+        <div class="story-label">WHAT SHAPED THEM</div>
+
+        <h3>Wound</h3>
+
+        <p>{st.session_state.answers["wound"]}</p>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="text-align:center; font-size:25px; color:#8A5A45;">
+        ↓
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown(f"""
+    <div class="story-card">
+
+        <div class="story-label">HOW THEY RESPOND</div>
+
+        <h3>Flaw</h3>
+
+        <p>{st.session_state.answers["flaw"]}</p>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="text-align:center; font-size:25px; color:#8A5A45;">
+        ↓
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown(f"""
+    <div class="story-card">
+
+        <div class="story-label">WHAT THEY BELIEVE</div>
+
+        <h3>Misbelief</h3>
+
+        <p>{st.session_state.answers["misbelief"]}</p>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="text-align:center; font-size:25px; color:#8A5A45;">
+        ↓
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown(f"""
+    <div class="story-card">
+
+        <div class="story-label">THE OTHER SIDE</div>
+
+        <h3>Strength</h3>
+
+        <p>{st.session_state.answers["strength"]}</p>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="story-card">
+
+        <div class="story-label">NOW WHAT?</div>
+
+        <h3>Put the character into the story.</h3>
+
+        <p style="font-size:17px; line-height:1.6;">
+            Your character's flaw and strength can influence the choices
+            they make when something happens to them.
+        </p>
+
+        <p style="font-style:italic; color:#8A5A45;">
+            Ask yourself: What happens when this character has to make
+            a difficult choice?
+        </p>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    if st.button("Save Character"):
+        character = {
+            "name": st.session_state.answers["name"],
+            "wound": st.session_state.answers["wound"],
+            "flaw": st.session_state.answers["flaw"],
+            "misbelief": st.session_state.answers["misbelief"],
+            "strength": st.session_state.answers["strength"],
+        }
+
+        st.session_state.characters.append(character)
+
+        st.success("Character saved!")
 
 elif page == "Beats":
     if not st.session_state.structure_locked:
