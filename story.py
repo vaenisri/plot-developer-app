@@ -283,15 +283,17 @@ if page == "Character Builder":
         )
 
     if st.button("Save Character"):
-        st.session_state.characters.append({
-            "name": st.session_state.answers["name"],
-            "wound": st.session_state.answers["wound"],
-            "flaw": st.session_state.answers["flaw"],
-            "misbelief": st.session_state.answers["misbelief"],
-            "strength": st.session_state.answers["strength"],
-        })
+        character = {
+        "name": st.session_state.answers["name"],
+        "wound": st.session_state.answers["wound"],
+        "flaw": st.session_state.answers["flaw"],
+        "misbelief": st.session_state.answers["misbelief"],
+        "strength": st.session_state.answers["strength"],
+    }
 
-        st.success("Character saved!")
+    st.session_state.characters.append(character)
+
+    st.success("Character saved!")
 
 elif page== "Characters":
 
