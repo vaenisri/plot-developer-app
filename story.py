@@ -116,13 +116,42 @@ if "selected_structure" not in st.session_state:
 
 
 questions = [
-    {"key": "name", "prompt": "What is your character's name?"},
-    {"key": "wound", "prompt": "What is the character's wound?"},
-    {"key": "flaw", "prompt": "What flaw has arisen from that wound?"},
-    {"key": "misbelief", "prompt": "What misbelief has arisen from that wound?"},
-    {"key": "strength", "prompt": "Where have those same negative traits served them well?"}
+    {
+        "key": "name",
+        "prompt": "What is your character's name?",
+        "label": "START WITH THE BASICS",
+        "description": "Give your character a name. It can be temporary if you haven't decided yet.",
+        "example": "Example: Maya, Daniel, Arjun, Elara..."
+    },
+    {
+        "key": "wound",
+        "prompt": "What is your character's wound?",
+        "label": "WHAT SHAPED THEM?",
+        "description": "A wound is a past experience that changed how your character sees themselves or the world.",
+        "example": "Example: Their parents constantly compared them to their older sibling."
+    },
+    {
+        "key": "flaw",
+        "prompt": "What flaw arose from that wound?",
+        "label": "THEIR FLAW",
+        "description": "A flaw is a pattern of behavior that causes problems for your character or the people around them.",
+        "example": "Example: They become competitive with everyone, even their friends."
+    },
+    {
+        "key": "misbelief",
+        "prompt": "What does your character now believe because of that wound?",
+        "label": "THEIR MISBELIEF",
+        "description": "A misbelief is something your character believes about themselves or the world that isn't completely true.",
+        "example": "Example: 'If I'm not the best, people won't value me.'"
+    },
+    {
+        "key": "strength",
+        "prompt": "How has that same trait helped them?",
+        "label": "THE OTHER SIDE",
+        "description": "The qualities that cause problems can also help your character. Find the strength hiding inside the flaw.",
+        "example": "Example: Their competitiveness makes them incredibly determined."
+    }
 ]
-
 PLOT_STRUCTURES = {
     "Hero's Journey": [
         "Ordinary World",
@@ -150,44 +179,70 @@ PLOT_STRUCTURES = {
     ],
 }
 
-page = st.sidebar.radio("Go to", ["Character Builder", "Characters", "Beats", "Flaw Arc"])
+page = st.sidebar.markdown("""
+<h2 style="color:#63372C;">Your Story</h2>
+<p style="color:#8A5A45;">
+Build your characters, shape your plot, follow the consequences.
+</p>
+""", unsafe_allow_html=True)
+
+page = st.sidebar.radio(
+    "WORKSPACE",
+    ["Character Builder", "Characters", "Beats", "Flaw Arc"]
+)
 
 if page == "Character Builder":
     st.title("Build Your Character")
-    st.caption("Character Builder · Step {} of {}".format(
-    st.session_state.step + 1,
-    len(questions)
-    ))
+    st.caption(
+    "CHARACTER BUILDER  ·  STEP {} OF {}".format(
+        st.session_state.step + 1,
+        len(questions)
+    )
+)
     
     st.progress(
     st.session_state.step / len(questions)
     )
     if st.session_state.step < len(questions):
+
         current_question = questions[st.session_state.step]
 
-        def go_next():
-            st.session_state.answers[current_question["key"]] = st.session_state.answer_input
-            st.session_state.step = st.session_state.step + 1
-            st.session_state.answer_input = ""
+    st.markdown(f"""
+    <div class="story-card">
 
-        with st.form(key="question_form"):
-            answer = st.text_input(current_question["prompt"], key="answer_input")
-            st.form_submit_button("Next", on_click=go_next)
-    else:
-        st.write("All questions answered!")
-        st.write("**Name:**", st.session_state.answers.get("name", ""))
-        st.write("**Wound:**", st.session_state.answers.get("wound", ""))
-        st.write("**Flaw:**", st.session_state.answers.get("flaw", ""))
-        st.write("**Misbelief:**", st.session_state.answers.get("misbelief", ""))
-        st.write("**Strength:**", st.session_state.answers.get("strength", ""))
-       
+        <div class="story-label">
+            {current_question["label"]}
+        </div>
 
-    
-        def save_character():
-            st.session_state.characters.append(st.session_state.answers)
-            st.session_state.answers = {}
-            st.session_state.step = 0
-        st.button("Save Character", on_click=save_character)   
+        <h2>
+            {current_question["prompt"]}
+        </h2>
+
+        <p style="font-size:17px; line-height:1.6;">
+            {current_question["description"]}
+        </p>
+
+        <p style="color:#8A5A45; font-style:italic;">
+            {current_question["example"]}
+        </p>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+    def go_next():
+        st.session_state.answers[current_question["key"]] = st.session_state.answer_input
+        st.session_state.step = st.session_state.step + 1
+        st.session_state.answer_input = ""
+
+    with st.form(key="question_form"):
+
+        answer = st.text_input(
+            "Your answer",
+            key="answer_input",
+            placeholder="Start writing..."
+        )
+
+        st.form_submit_button("Continue →", on_click=go_next) 
 
 elif page== "Characters":
 
@@ -221,7 +276,7 @@ elif page == "Beats":
     if not st.session_state.structure_locked:
         st.title("Choose Your Plot Structure")
         st.write("A **beat** is a single moment or turning point in your story — a scene where something happens. We'll organize your beats using whichever structure you pick below.")
-        st.write("Pick the structure you'll use for this story. Once you start adding beats, this can't be changed.")
+        st.write("Pick the structure you'll use for this story. Once you confirm, this can't be changed.")
 
         choice = st.selectbox("Plot structure", list(PLOT_STRUCTURES.keys()))
 
@@ -351,6 +406,6 @@ elif page == "Flaw Arc":
             costs.append(b["cost"])
 
         st.header("Character Stakes Arc")
-        st.caption("How much is your character's flaw influencing the story?")
-        st.caption("A rising cost means rising consequences of their actions and creates a story worth reading.")
+        st.caption("How much does each beat raise the stakes of your story?")
+        st.caption("Rising costs create a page-turning story.")
         st.line_chart(costs)
