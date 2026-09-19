@@ -179,7 +179,7 @@ PLOT_STRUCTURES = {
     ],
 }
 
-page = st.sidebar.markdown("""
+st.sidebar.markdown("""
 <h2 style="color:#63372C;">Your Story</h2>
 <p style="color:#8A5A45;">
 Build your characters, shape your plot, follow the consequences.
@@ -201,48 +201,48 @@ if page == "Character Builder":
 )
     
     st.progress(
-    st.session_state.step / len(questions)
-    )
+    (st.session_state.step + 1) / len(questions)
+)
     if st.session_state.step < len(questions):
 
         current_question = questions[st.session_state.step]
 
-    st.markdown(f"""
-    <div class="story-card">
+        st.markdown(f"""
+            <div class="story-card">
 
-        <div class="story-label">
+            <div class="story-label">
             {current_question["label"]}
-        </div>
+            </div>
 
-        <h2>
+            <h2>
             {current_question["prompt"]}
-        </h2>
+            </h2>
 
-        <p style="font-size:17px; line-height:1.6;">
-            {current_question["description"]}
-        </p>
+            <p style="font-size:17px; line-height:1.6;">
+                {current_question["description"]}
+            </p>
 
-        <p style="color:#8A5A45; font-style:italic;">
-            {current_question["example"]}
-        </p>
+            <p style="color:#8A5A45; font-style:italic;">
+                {current_question["example"]}
+            </p>
 
-    </div>
-    """, unsafe_allow_html=True)
+            </div>
+            """, unsafe_allow_html=True)
 
-    def go_next():
-        st.session_state.answers[current_question["key"]] = st.session_state.answer_input
-        st.session_state.step = st.session_state.step + 1
-        st.session_state.answer_input = ""
+        def go_next():
+            st.session_state.answers[current_question["key"]] = st.session_state.answer_input
+            st.session_state.step = st.session_state.step + 1
+            st.session_state.answer_input = ""
 
-    with st.form(key="question_form"):
+        with st.form(key="question_form"):
 
-        answer = st.text_input(
+            answer = st.text_input(
             "Your answer",
             key="answer_input",
             placeholder="Start writing..."
-        )
+            )
 
-        st.form_submit_button("Continue →", on_click=go_next) 
+            st.form_submit_button("Continue →", on_click=go_next) 
 
 elif page== "Characters":
 
