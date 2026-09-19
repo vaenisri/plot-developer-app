@@ -195,14 +195,16 @@ if page == "Character Builder":
     st.title("Build Your Character")
     st.caption(
     "CHARACTER BUILDER  ·  STEP {} OF {}".format(
-        st.session_state.step + 1,
+        min(st.session_state.step + 1, len(questions)),
         len(questions)
     )
 )
+
     
     st.progress(
-    (st.session_state.step + 1) / len(questions)
+    min(st.session_state.step + 1, len(questions)) / len(questions)
 )
+
     if st.session_state.step < len(questions):
 
         current_question = questions[st.session_state.step]
@@ -243,6 +245,53 @@ if page == "Character Builder":
             )
 
             st.form_submit_button("Continue →", on_click=go_next) 
+    
+    else:
+
+        st.title("Character Complete")
+
+        st.write("You've built the core of your character.")
+
+        st.markdown(f"""
+        <div class="story-card">
+
+        <div class="story-label">CHARACTER CORE</div>
+
+        <h2>{st.session_state.answers["name"]}</h2>
+
+        <hr>
+
+        <p><b>Wound</b><br>
+        {st.session_state.answers["wound"]}</p>
+
+        <p><b>Flaw</b><br>
+        {st.session_state.answers["flaw"]}</p>
+
+        <p><b>Misbelief</b><br>
+        {st.session_state.answers["misbelief"]}</p>
+
+        <p><b>Strength</b><br>
+        {st.session_state.answers["strength"]}</p>
+
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.write("These pieces give your character an internal chain:")
+
+        st.info(
+        "Wound → Flaw → Misbelief → Strength"
+        )
+
+    if st.button("Save Character"):
+        st.session_state.characters.append({
+            "name": st.session_state.answers["name"],
+            "wound": st.session_state.answers["wound"],
+            "flaw": st.session_state.answers["flaw"],
+            "misbelief": st.session_state.answers["misbelief"],
+            "strength": st.session_state.answers["strength"],
+        })
+
+        st.success("Character saved!")
 
 elif page== "Characters":
 
