@@ -210,26 +210,25 @@ if page == "Character Builder":
         current_question = questions[st.session_state.step]
 
         st.markdown(f"""
-            <div class="story-card">
+        <div class="story-card">
 
-            <div class="story-label">
-            {current_question["label"]}
-            </div>
+        <div class="story-label">
+        {current_question["label"]}
+        </div>
+        <h2>
+        {current_question["prompt"]}
+        </h2>
 
-            <h2>
-            {current_question["prompt"]}
-            </h2>
+        <p style="font-size:17px; line-height:1.6;">
+            {current_question["description"]}
+        </p>
 
-            <p style="font-size:17px; line-height:1.6;">
-                {current_question["description"]}
-            </p>
+        <p style="color:#8A5A45; font-style:italic;">
+            {current_question["example"]}
+        </p>
 
-            <p style="color:#8A5A45; font-style:italic;">
-                {current_question["example"]}
-            </p>
-
-            </div>
-            """, unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
 
         def go_next():
             st.session_state.answers[current_question["key"]] = st.session_state.answer_input
@@ -248,76 +247,27 @@ if page == "Character Builder":
     
     else:
 
-        st.title("Character Complete")
+        st.title("Character Core")
 
-        st.write("You've built the core of your character.")
+        st.caption("YOU'VE BUILT THE FOUNDATION")
 
         st.markdown(f"""
         <div class="story-card">
-
-        <div class="story-label">CHARACTER CORE</div>
-
-        <h2>{st.session_state.answers["name"]}</h2>
-
-        <hr>
-
-        <p><b>Wound</b><br>
-        {st.session_state.answers["wound"]}</p>
-
-        <p><b>Flaw</b><br>
-        {st.session_state.answers["flaw"]}</p>
-
-        <p><b>Misbelief</b><br>
-        {st.session_state.answers["misbelief"]}</p>
-
-        <p><b>Strength</b><br>
-        {st.session_state.answers["strength"]}</p>
-
-        </div>
-        """, unsafe_allow_html=True)
-
-        st.write("These pieces give your character an internal chain:")
-
-        st.info(
-        "Wound → Flaw → Misbelief → Strength"
-        )
-
-    if st.button("Save Character"):
-        character = {
-        "name": st.session_state.answers["name"],
-        "wound": st.session_state.answers["wound"],
-        "flaw": st.session_state.answers["flaw"],
-        "misbelief": st.session_state.answers["misbelief"],
-        "strength": st.session_state.answers["strength"],
-        }
-
-        st.session_state.characters.append(character)
-
-        st.success("Character saved!")
-
-elif page== "Characters":
-
-    st.title("Character Core")
-
-    st.caption("YOU'VE BUILT THE FOUNDATION")
-
-    st.markdown(f"""
-    <div class="story-card">
 
         <div class="story-label">YOUR CHARACTER</div>
 
         <h2>{st.session_state.answers["name"]}</h2>
 
         <p style="font-size:17px; line-height:1.6;">
-            Your character's experiences, flaws, beliefs, and strengths
-            are connected. Here's the chain you've created.
+        Your character's experiences, flaws, beliefs, and strengths
+        are connected. Here's the chain you've created.
         </p>
 
-    </div>
-    """, unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown(f"""
-    <div class="story-card">
+        st.markdown(f"""
+        <div class="story-card">
 
         <div class="story-label">WHAT SHAPED THEM</div>
 
@@ -325,17 +275,17 @@ elif page== "Characters":
 
         <p>{st.session_state.answers["wound"]}</p>
 
-    </div>
-    """, unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown("""
-    <div style="text-align:center; font-size:25px; color:#8A5A45;">
-        ↓
-    </div>
-    """, unsafe_allow_html=True)
+        st.markdown("""
+        <div style="text-align:center; font-size:25px; color:#8A5A45;">
+            ↓
+        </div>
+            """, unsafe_allow_html=True)
 
-    st.markdown(f"""
-    <div class="story-card">
+        st.markdown(f"""
+        <div class="story-card">
 
         <div class="story-label">HOW THEY RESPOND</div>
 
@@ -343,17 +293,17 @@ elif page== "Characters":
 
         <p>{st.session_state.answers["flaw"]}</p>
 
-    </div>
-    """, unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown("""
-    <div style="text-align:center; font-size:25px; color:#8A5A45;">
-        ↓
-    </div>
-    """, unsafe_allow_html=True)
+        st.markdown("""
+        <div style="text-align:center; font-size:25px; color:#8A5A45;">
+         ↓
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown(f"""
-    <div class="story-card">
+        st.markdown(f"""
+        <div class="story-card">
 
         <div class="story-label">WHAT THEY BELIEVE</div>
 
@@ -361,17 +311,17 @@ elif page== "Characters":
 
         <p>{st.session_state.answers["misbelief"]}</p>
 
-    </div>
-    """, unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown("""
-    <div style="text-align:center; font-size:25px; color:#8A5A45;">
-        ↓
-    </div>
-    """, unsafe_allow_html=True)
+        st.markdown("""
+        <div style="text-align:center; font-size:25px; color:#8A5A45;">
+            ↓
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown(f"""
-    <div class="story-card">
+        st.markdown(f"""
+        <div class="story-card">
 
         <div class="story-label">THE OTHER SIDE</div>
 
@@ -379,47 +329,84 @@ elif page== "Characters":
 
         <p>{st.session_state.answers["strength"]}</p>
 
-    </div>
-    """, unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown("""
-    <div class="story-card">
+        st.markdown("""
+        <div class="story-card">
 
         <div class="story-label">NOW WHAT?</div>
 
         <h3>Put the character into the story.</h3>
 
         <p style="font-size:17px; line-height:1.6;">
-            Your character's flaw and strength can influence the choices
-            they make when something happens to them.
+        Your character's flaw and strength can influence the choices
+        they make when something happens to them.
         </p>
 
         <p style="font-style:italic; color:#8A5A45;">
-            Ask yourself: What happens when this character has to make
-            a difficult choice?
+        Ask yourself: What happens when this character has to make
+        a difficult choice?
         </p>
 
-    </div>
-    """, unsafe_allow_html=True)
+        </div>
+        """, unsafe_allow_html=True)
 
-    if st.button("Save Character"):
-        character = {
-            "name": st.session_state.answers["name"],
-            "wound": st.session_state.answers["wound"],
-            "flaw": st.session_state.answers["flaw"],
-            "misbelief": st.session_state.answers["misbelief"],
-            "strength": st.session_state.answers["strength"],
-        }
+        def save_character():
+                character = {
+                    "name": st.session_state.answers["name"],
+                    "wound": st.session_state.answers["wound"],
+                    "flaw": st.session_state.answers["flaw"],
+                    "misbelief": st.session_state.answers["misbelief"],
+                    "strength": st.session_state.answers["strength"],
+                    }
+                st.session_state.characters.append(character)
+                st.session_state.answers = {}
+                st.session_state.step = 0
 
-        st.session_state.characters.append(character)
+        st.button("Save Character", on_click=save_character)
 
-        st.success("Character saved!")
+elif page== "Characters":
+
+    st.subheader("Your Characters")
+    for c in st.session_state.characters:
+        st.markdown(f"""
+        <div class="story-card">
+
+        <div class="story-label">CHARACTER</div>
+
+        <h2>{c["name"]}</h2>
+
+        <hr>
+
+        <p><b>Wound</b><br>
+        {c["wound"]}</p>
+
+        <p><b>Flaw</b><br>
+        {c["flaw"]}</p>
+
+        <p><b>Misbelief</b><br>
+        {c["misbelief"]}</p>
+
+        <p><b>Strength</b><br>
+        {c["strength"]}</p>
+
+        </div>
+        """, unsafe_allow_html=True)
 
 elif page == "Beats":
     if not st.session_state.structure_locked:
-        st.title("Choose Your Plot Structure")
-        st.write("A **beat** is a single moment or turning point in your story — a scene where something happens. We'll organize your beats using whichever structure you pick below.")
-        st.write("Pick the structure you'll use for this story. Once you confirm, this can't be changed.")
+        st.title("Shape Your Story")
+
+        st.write(
+        "A **beat** is a moment in your story where something changes. "
+        "It can be a decision, discovery, setback, confrontation, or consequence."
+        )
+
+        st.info(
+        "Think: Something happens → your character responds → "
+        "that response changes what happens next."
+        )       
 
         choice = st.selectbox("Plot structure", list(PLOT_STRUCTURES.keys()))
 
@@ -429,6 +416,10 @@ elif page == "Beats":
         st.button("Confirm structure", on_click=confirm_structure)
     else:
         stages = PLOT_STRUCTURES[st.session_state.selected_structure]
+        st.caption(
+        "This gives your story a path to follow. "
+        "You can fill each stage with your own story moments."
+)
 
         if len(st.session_state.characters) == 0:
             st.write("Create a character before adding beats!")
@@ -450,20 +441,21 @@ elif page == "Beats":
 
                     for b in stage_beats:
                         st.markdown(f"""
-        <div class="story-card">
+                        <div class="story-card">
 
-        <div class="story-label">{b["stage"]}</div>
+                        <div class="story-label">{b["stage"]}</div>
 
-        <h3>{b["title"]}</h3>
+                        <h3>{b["title"]}</h3>
 
-        <p><b>Character:</b> {b["character_name"]}</p>
+                        <p><b>Character:</b> {b["character_name"]}</p>
 
-        <p><b>Driven by:</b> {b["trait_type"]}</p>
+                        <p><b>Driven by:</b> {b["trait_type"]}</p>
 
-        <p><b>Cost:</b> {b["cost"]}/10</p>
+                        <p><b>Cost:</b> {b["cost"]}/10</p>
+                        <p><b>Choice:</b> {b["character_choice"]}</p>
 
-    </div>
-    """, unsafe_allow_html=True)
+                        </div>
+                        """, unsafe_allow_html=True)
 
                         
 
@@ -477,6 +469,8 @@ elif page == "Beats":
                         chosen_name = st.selectbox("Which character?", names, key=f"name_{stage}")
                         
                         beat_title = st.text_input("Briefly explain what happens in this beat.", key=f"title_{stage}")
+                        character_choice = st.text_input("What does the character choose to do?",key=f"choice_{stage}")
+                                                            
                         cost = st.slider("How much is this beat costing the character? (1=low stakes, 10=devastating)", 1, 10, key=f"cost_{stage}")
                         submitted = st.form_submit_button("Save beat")
 
@@ -488,6 +482,7 @@ elif page == "Beats":
                             "trait_type": trait_type,
                             "response_to_trigger": response_to_trigger,
                             "cost": cost,
+                            "character_choice": character_choice,
                         }
                         st.session_state.beats.append(beat)
                         st.write("Beat saved!")
