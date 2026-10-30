@@ -442,134 +442,118 @@ elif page== "Characters":
         </div>
         """, unsafe_allow_html=True)
 
-elif page == "Beats":
+elif page == "Beats Engine":
+    st.title("Shape Your Story Beats")
+
     if not st.session_state.structure_locked:
-        st.title("Shape Your Story")
-
-        st.write(
-        "A **beat** is a moment in your story where something changes. "
-        "It can be a decision, discovery, setback, confrontation, or consequence."
-        )
-
-        st.info(
-        "Think: Something happens → your character responds → "
-        "that response changes what happens next."
-        )       
-
-        choice = st.selectbox("Plot structure", list(PLOT_STRUCTURES.keys()))
+        st.write("Choose a plot framework to organize your character's journey:")
+        choice = st.selectbox("Plot Structure", list(PLOT_STRUCTURES.keys()))
 
         def confirm_structure():
             st.session_state.selected_structure = choice
             st.session_state.structure_locked = True
-        st.button("Confirm structure", on_click=confirm_structure)
+        st.button("Confirm Structure", on_click=confirm_structure)
+
     else:
-        stages = PLOT_STRUCTURES[st.session_state.selected_structure]
-        st.caption(
-        "This gives your story a path to follow. "
-        "You can fill each stage with your own story moments."
-)
+        structure = st.session_state.selected_structure
+        stages = PLOT_STRUCTURES[structure]
+        guides = STAGE_GUIDES[structure]
 
-        if len(st.session_state.characters) == 0:
-            st.write("Create a character before adding beats!")
-        else:
-            names = []
-            for c in st.session_state.characters:
-                names.append(c["name"])
+        col_left, col_right = st.columns([1.8, 1])
 
-            st.header("Beats by Stage")
-
+        with col_left:
+            st.subheader("Story Stages & Beats")
             
+            if len(st.session_state.characters) == 0:
+                st.warning("⚠️ Create at least one character in the Character Builder before adding beats!")
+            else:
+                char_names = [c["name"] for c in st.session_state.characters]
 
-            for stage in stages:
-                with st.expander(stage):
-                    stage_beats = []
-                    for b in st.session_state.beats:
-                        if b["stage"] == stage:
-                            stage_beats.append(b)
-
-                    for b in stage_beats:
+                for stage in stages:
+                    with st.expander(f"📍 {stage}"):
+                        # Guidance for stage definition
                         st.markdown(f"""
-                        <div class="story-card">
-
-                        <div class="story-label">{b["stage"]}</div>
-
-                        <h3>{b["title"]}</h3>
-
-                        <p><b>Character:</b> {b["character_name"]}</p>
-
-                        <p><b>Driven by:</b> {b["trait_type"]}</p>
-
-                        <p><b>Cost:</b> {b["cost"]}/10</p>
-                        <p><b>Choice:</b> {b["character_choice"]}</p>
-
+                        <div class="stage-guide">
+                            <div class="stage-guide-title">What happens at this stage?</div>
+                            <div class="stage-guide-desc">{guides.get(stage, "")}</div>
                         </div>
                         """, unsafe_allow_html=True)
 
-                        
+                        # Existing beats for stage
+                        stage_beats = [b for b in st.session_state.beats if b["stage"] == stage]
+                        for b in stage_beats:
+                            badge_class = f"badge-{b['trait_type'].lower()}"
+                            st.markdown(f"""
+                            <div class="story-card">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <h3>{b["title"]}</h3>
+                                    <span class="{badge_class}">{b["trait_type"]} Driven</span>
+                                </div>
+                                <p><b>Character:</b> {b["character_name"]}</p>
+                                <p><b>Choice Made:</b> {b["character_choice"]}</p>
+                                <p><b>Emotional Cost:</b> {b["cost"]}/10</p>
+                            </div>
+                            """, unsafe_allow_html=True)
 
-                    trait_type = st.radio("What kind of beat is this?", ["Flaw", "Strength", "External"], key=f"trait_{stage}")
-                    st.caption("Flaw = this beat happens because of your character's flaw. Strength = it happens because of their strength. External = it's outside their control (but you'll need to say what they DO about it).")
-                    response_to_trigger = ""
-                    if trait_type == "External":
-                        response_to_trigger = st.text_input("This is outside the character's control - what does the character DO about it?", key=f"response_{stage}")
+                        st.markdown("---")
+                        st.markdown("##### ➕ Add Beat to Stage")
 
-                    with st.form(key=f"beat_form_{stage}"):
-                        chosen_name = st.selectbox("Which character?", names, key=f"name_{stage}")
-                        
-                        beat_title = st.text_input("Briefly explain what happens in this beat.", key=f"title_{stage}")
-                        character_choice = st.text_input("What does the character choose to do?",key=f"choice_{stage}")
-                                                            
-                        cost = st.slider("How much is this beat costing the character? (1=low stakes, 10=devastating)", 1, 10, key=f"cost_{stage}")
-                        submitted = st.form_submit_button("Save beat")
+                        # Dynamic Form per Stage
+                        with st.form(key=f"form_{stage}"):
+                            chosen_name = st.selectbox("Who is taking action?", char_names, key=f"name_{stage}")
+                            beat_title = st.text_input("What happens in this beat?", placeholder="e.g., Refuses the promotion offer", key=f"title_{stage}")
+                            
+                            trait_type = st.radio(
+                                "What drives this beat?",
+                                ["Flaw", "Strength", "External"],
+                                help="Flaw = Action stems from fear/misbelief. Strength = Action stems from personal growth/virtue. External = Circumstance forces action.",
+                                key=f"trait_{stage}"
+                            )
 
-                    if submitted:
-                        beat = {
-                            "stage": stage,
-                            "title": beat_title,
-                            "character_name": chosen_name,
-                            "trait_type": trait_type,
-                            "response_to_trigger": response_to_trigger,
-                            "cost": cost,
-                            "character_choice": character_choice,
-                        }
-                        st.session_state.beats.append(beat)
-                        st.write("Beat saved!")
-    
+                            character_choice = st.text_input("What active choice does the character make?", placeholder="e.g., Quits on the spot to avoid being judged", key=f"choice_{stage}")
+                            cost = st.slider("Emotional/Physical Stakes Cost (1-10)", 1, 10, value=5, key=f"cost_{stage}")
+                            
+                            submitted = st.form_submit_button("Save Beat")
+                            if submitted:
+                                if beat_title and character_choice:
+                                    st.session_state.beats.append({
+                                        "stage": stage,
+                                        "title": beat_title,
+                                        "character_name": chosen_name,
+                                        "trait_type": trait_type,
+                                        "cost": cost,
+                                        "character_choice": character_choice
+                                    })
+                                    st.rerun()
+                                else:
+                                    st.error("Please fill out the beat description and choice.")
 
-    flaw_count= 0
-    strength_count=0
-    external_count=0
-    for b in st.session_state.beats:
-        if b["trait_type"]=="Flaw":
-            flaw_count= flaw_count + 1
-        elif b["trait_type"]== "Strength":
-            strength_count= strength_count +1
-        elif b["trait_type"]=="External":
-            external_count= external_count+1
+        with col_right:
+            st.subheader("📊 Beat Checker")
+            
+            flaw_count = sum(1 for b in st.session_state.beats if b["trait_type"] == "Flaw")
+            strength_count = sum(1 for b in st.session_state.beats if b["trait_type"] == "Strength")
+            external_count = sum(1 for b in st.session_state.beats if b["trait_type"] == "External")
 
+            c1, c2, c3 = st.columns(3)
+            c1.metric("Flaw", flaw_count)
+            c2.metric("Strength", strength_count)
+            c3.metric("External", external_count)
 
-    st.header("BEAT CHECKER")
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        st.metric("Flaw", flaw_count)
-
-    with col2:
-        st.metric("Strength", strength_count)
-
-    with col3:
-        st.metric("External", external_count)
-
-    if external_count > flaw_count + strength_count:
-        st.warning(
-        "Your plot currently relies heavily on external events. "
-        "Try checking whether your character's flaw or strength could "
-        "change what happens next."
-        )
-    else:
-        st.success(
-            "Your character is actively influencing the story."
-        )
+            st.markdown("---")
+            if external_count > flaw_count + strength_count:
+                st.warning(
+                    "⚠️ **High External Plot Agency**\n\n"
+                    "Your story currently relies heavily on external events. "
+                    "Try revising beats so that your character's flaws or strengths force the story forward."
+                )
+            elif flaw_count + strength_count > 0:
+                st.success(
+                    "✨ **Strong Character Agency**\n\n"
+                    "Your character's decisions, fears, and growth are actively shaping the narrative trajectory."
+                )
+            else:
+                st.info("Add story beats to analyze character agency vs. external plot events.")
 
 elif page == "Flaw Arc":
     if not st.session_state.structure_locked:
