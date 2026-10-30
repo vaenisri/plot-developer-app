@@ -578,5 +578,62 @@ elif page == "Cost Arc":
         else:
             st.info("No beats recorded yet. Populate beats in the Beats Engine to view the stakes curve.")
 
+elif page == "Drafting Studio":
+    st.title("Drafting Studio")
+    st.caption("Write scenes directly alongside character psychology and beat requirements.")
 
+    if not st.session_state.beats:
+        st.info("No beats saved yet! Add beats in the Beats Engine to begin drafting scene scenes.")
+    else:
+        beat_options = [f"{b['stage']}: {b['title']}" for b in st.session_state.beats]
+        selected_beat_str = st.selectbox("Select Beat to Draft", beat_options)
+        
+       
+        selected_index = beat_options.index(selected_beat_str)
+        beat = st.session_state.beats[selected_index]
+        
+       
+        char = next((c for c in st.session_state.characters if c["name"] == beat["character_name"]), None)
+
+        col_editor, col_context = st.columns([2, 1])
+
+        with col_context:
+            st.markdown("### Scene Reference")
+            
+            st.markdown(f"""
+            <div class="story-card">
+                <div class="story-label">BEAT DETAILS</div>
+                <h4>{beat["title"]}</h4>
+                <p><b>Stage:</b> {beat["stage"]}</p>
+                <p><b>Choice:</b> {beat["character_choice"]}</p>
+                <p><b>Driver:</b> <span class="badge-{beat['trait_type'].lower()}">{beat['trait_type']}</span></p>
+            </div>
+            """, unsafe_allow_html=True)
+
+            if char:
+                st.markdown(f"""
+                <div class="story-card">
+                    <div class="story-label">CHARACTER PSYCHOLOGY</div>
+                    <h4>{char["name"]}</h4>
+                    <p><b>Wound:</b> {char["wound"]}</p>
+                    <p><b>Misbelief:</b> {char["misbelief"]}</p>
+                    <p><b>Flaw:</b> {char["flaw"]}</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+        with col_editor:
+            st.markdown(f"### Scene Draft: {beat['title']}")
+            
+            current_draft = st.session_state.draft_text.get(selected_beat_str, "")
+            
+            draft = st.text_area(
+                "Write your scene here...",
+                value=current_draft,
+                height=450,
+                key=f"editor_{selected_beat_str}"
+            )
+            
+            if st.button("Save Scene Draft"):
+                st.session_state.draft_text[selected_beat_str] = draft
+                st.success("Draft saved successfully!")
         
