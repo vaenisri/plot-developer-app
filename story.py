@@ -141,23 +141,18 @@ section[data-testid="stSidebar"] {
 
 if "step" not in st.session_state:
     st.session_state.step = 0
-
-
 if "answers" not in st.session_state:
     st.session_state.answers = {}
-
 if "characters" not in st.session_state:
     st.session_state.characters = []
-
 if "beats" not in st.session_state:
     st.session_state.beats = []
-
 if "structure_locked" not in st.session_state:
     st.session_state.structure_locked = False
-
 if "selected_structure" not in st.session_state:
     st.session_state.selected_structure = None
-
+if "draft_text" not in st.session_state:
+    st.session_state.draft_text = {}
 
 questions = [
     {
