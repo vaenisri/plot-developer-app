@@ -2,31 +2,32 @@ import streamlit as st
 
 
 
+st.set_page_config(page_title="Story Engine", page_icon="📖", layout="wide")
+
 st.markdown("""
 <style>
-
 body, .stApp {
     font-family: Georgia, serif;
     background-color: #F8F1E7;
     color: #332820;
 }
 
-/* Main content */
+/* Main content container */
 .block-container {
-    max-width: 950px;
-    padding-top: 3rem;
+    max-width: 1050px;
+    padding-top: 2.5rem;
     padding-bottom: 4rem;
 }
 
-/* Main headings */
-h1 {
+/* Main Headings */
+h1, h2, h3, h4 {
     color: #63372C;
-    font-size: 42px !important;
-    letter-spacing: -1px;
+    font-family: Georgia, serif;
 }
 
-h2, h3 {
-    color: #63372C;
+h1 {
+    font-size: 38px !important;
+    letter-spacing: -0.5px;
 }
 
 /* Sidebar */
@@ -43,7 +44,8 @@ section[data-testid="stSidebar"] {
     border-radius: 8px;
     padding: 0.55rem 1.3rem;
     font-family: Georgia, serif;
-    font-size: 16px;
+    font-size: 15px;
+    transition: all 0.2s ease;
 }
 
 .stButton > button:hover {
@@ -51,13 +53,12 @@ section[data-testid="stSidebar"] {
     color: white;
 }
 
-/* Text inputs */
-.stTextInput input {
-    background-color: #FFFDF9;
-    border: 1px solid #CDBBA5;
-    border-radius: 8px;
-    padding: 12px;
-    font-family: Georgia, serif;
+/* Form Controls & Inputs */
+.stTextInput input, .stTextArea textarea, .stSelectbox > div {
+    background-color: #FFFDF9 !important;
+    border: 1px solid #CDBBA5 !important;
+    border-radius: 8px !important;
+    font-family: Georgia, serif !important;
 }
 
 /* Expanders */
@@ -65,32 +66,75 @@ section[data-testid="stSidebar"] {
     background-color: #FFFDF9;
     border: 1px solid #D8C7B4;
     border-radius: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
-/* Cards */
+/* Custom Cards */
 .story-card {
     background-color: #FFFDF9;
     border: 1px solid #D8C7B4;
     border-radius: 12px;
     padding: 22px;
     margin: 12px 0;
-    box-shadow: 0 3px 12px rgba(80, 50, 30, 0.08);
+    box-shadow: 0 3px 12px rgba(80, 50, 30, 0.05);
 }
 
 .story-label {
     color: #8A5A45;
-    font-size: 13px;
+    font-size: 12px;
+    font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1.5px;
+    margin-bottom: 6px;
 }
 
-.story-value {
-    color: #332820;
-    font-size: 17px;
-    line-height: 1.5;
+/* Stage Guidance Banner */
+.stage-guide {
+    background-color: #F1E5D5;
+    border-left: 4px solid #7D3028;
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 18px;
 }
 
+.stage-guide-title {
+    color: #63372C;
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.stage-guide-desc {
+    color: #524136;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Trait Badge Styles */
+.badge-flaw {
+    background-color: #FADBD8;
+    color: #78281F;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.badge-strength {
+    background-color: #D4EFDF;
+    color: #145A32;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.badge-external {
+    background-color: #E8DAEF;
+    color: #512E5F;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
 </style>
 """, unsafe_allow_html=True)
 
