@@ -470,7 +470,7 @@ elif page == "Beats Engine":
                 char_names = [c["name"] for c in st.session_state.characters]
 
                 for stage in stages:
-                    with st.expander(f"📍 {stage}"):
+                    with st.expander(f"{stage}"):
                         # Guidance for stage definition
                         st.markdown(f"""
                         <div class="stage-guide">
@@ -529,7 +529,7 @@ elif page == "Beats Engine":
                                     st.error("Please fill out the beat description and choice.")
 
         with col_right:
-            st.subheader("📊 Beat Checker")
+            st.subheader("Beat Checker")
             
             flaw_count = sum(1 for b in st.session_state.beats if b["trait_type"] == "Flaw")
             strength_count = sum(1 for b in st.session_state.beats if b["trait_type"] == "Strength")
@@ -549,33 +549,34 @@ elif page == "Beats Engine":
                 )
             elif flaw_count + strength_count > 0:
                 st.success(
-                    "✨ **Strong Character Agency**\n\n"
+                    " **Strong Character Agency**\n\n"
                     "Your character's decisions, fears, and growth are actively shaping the narrative trajectory."
                 )
             else:
                 st.info("Add story beats to analyze character agency vs. external plot events.")
 
-elif page == "Flaw Arc":
+elif page == "Cost Arc":
+    st.title("Character Stakes Arc")
+    
     if not st.session_state.structure_locked:
-        st.write("Choose a plot structure on the Beats page first.")
+        st.info("Please select a plot structure on the Beats Engine page first.")
     else:
         stages = PLOT_STRUCTURES[st.session_state.selected_structure]
+        
+      
+        stage_order = {stage: idx for idx, stage in enumerate(stages)}
+        sorted_beats = sorted(
+            st.session_state.beats, 
+            key=lambda b: stage_order.get(b["stage"], 0)
+        )
 
-        relevant_beats = []
-        for b in st.session_state.beats:
-            if b["stage"] in stages:
-                relevant_beats.append(b)
+        costs = [b["cost"] for b in sorted_beats]
 
-        def stage_position(beat):
-            return stages.index(beat["stage"])
+        if costs:
+            st.caption("Visualization of emotional and physical stakes rising across story beats.")
+            st.line_chart(costs)
+        else:
+            st.info("No beats recorded yet. Populate beats in the Beats Engine to view the stakes curve.")
 
-        sorted_beats = sorted(relevant_beats, key=stage_position)
 
-        costs = []
-        for b in sorted_beats:
-            costs.append(b["cost"])
-
-        st.header("Character Stakes Arc")
-        st.caption("How much does each beat raise the stakes of your story?")
-        st.caption("Rising costs create a page-turning story.")
-        st.line_chart(costs)
+        
