@@ -154,6 +154,38 @@ if "selected_structure" not in st.session_state:
 if "draft_text" not in st.session_state:
     st.session_state.draft_text = {}
 
+STAGE_GUIDES = {
+    "Hero's Journey": {
+        "Ordinary World": "The status quo. Show the protagonist's comfort zone, everyday life, and the misbelief that keeps them stuck.",
+        "Call to Adventure": "An external disruption or invitation that threatens to disrupt the status quo and forces the character to act.",
+        "Refusal of the Call": "The character hesitates or tries to stay in their comfort zone because their wound/fear makes change terrifying.",
+        "Meeting the Mentor": "A guide, lesson, or discovery gives the character the courage, wisdom, or push needed to take a leap.",
+        "Crossing the Threshold": "Point of no return. The protagonist steps into the unknown, leaving their familiar world behind.",
+        "Tests, Allies, Enemies": "Navigating the new world. The character's flaw causes clashes, while new allies force them to adapt.",
+        "Approach to the Inmost Cave": "Preparing for the biggest challenge yet. Doubt and internal fear creep back in.",
+        "Ordeal": "The central crisis. The character faces their deepest fear or flaw head-on. They must sacrifice something to survive.",
+        "Reward": "Having survived the ordeal, the character earns a vital insight, object, or sense of clarity.",
+        "The Road Back": "Consequences of the ordeal emerge. The story pushes urgently toward the final resolution.",
+        "Resurrection": "The ultimate psychological exam. Can the character prove they've truly overcome their flaw/misbelief?",
+        "Return with the Elixir": "The return home. The character enters a new status quo, permanently changed from within."
+    },
+    "Three Act Structure": {
+        "Act I: Setup": "Establish the protagonist's status quo, primary flaw, and current life before disruption.",
+        "Inciting Incident": "The event that disrupts balance and triggers the entire story chain.",
+        "First Plot Point": "The character makes an irreversible choice to commit to the journey.",
+        "Rising Action": "Obstacles escalate as the character's flaws and choices complicate their path.",
+        "Midpoint": "A major revelation or turning point shifts the character from reactive to proactive.",
+        "Second Plot Point": "All hope seems lost. The character's misbelief reaches a catastrophic breaking point.",
+        "Climax": "The final showdown where the character must act from strength or overcome their flaw.",
+        "Resolution": "The dust settles, revealing the newly transformed character and new reality."
+    }
+}
+
+PLOT_STRUCTURES = {
+    "Hero's Journey": list(STAGE_GUIDES["Hero's Journey"].keys()),
+    "Three Act Structure": list(STAGE_GUIDES["Three Act Structure"].keys())
+}
+
 questions = [
     {
         "key": "name",
@@ -191,33 +223,6 @@ questions = [
         "example": "Example: Their competitiveness makes them incredibly determined."
     }
 ]
-PLOT_STRUCTURES = {
-    "Hero's Journey": [
-        "Ordinary World",
-        "Call to Adventure",
-        "Refusal of the Call",
-        "Meeting the Mentor",
-        "Crossing the Threshold",
-        "Tests, Allies, Enemies",
-        "Approach to the Inmost Cave",
-        "Ordeal",
-        "Reward",
-        "The Road Back",
-        "Resurrection",
-        "Return with the Elixir",
-    ],
-    "Three Act Structure": [
-        "Act I: Setup",
-        "Inciting Incident",
-        "First Plot Point",
-        "Rising Action",
-        "Midpoint",
-        "Second Plot Point",
-        "Climax",
-        "Resolution",
-    ],
-}
-
 st.sidebar.markdown("""
 <h2 style="color:#63372C;">Your Story</h2>
 <p style="color:#8A5A45;">
