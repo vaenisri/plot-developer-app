@@ -225,11 +225,15 @@ questions = [
 ]
 st.sidebar.markdown("""
 <h2 style="color:#63372C;">Your Story</h2>
-<p style="color:#8A5A45;">
-Build your characters, shape your plot, follow the consequences.
+<p style="color:#8A5A45; font-size:14px;">
+Build characters, map character-driven beats, and write scene drafts.
 </p>
 """, unsafe_allow_html=True)
 
+page = st.sidebar.radio(
+    "WORKSPACE",
+    ["Character Builder", "Characters", "Beats Engine", "Flaw Arc", "Drafting Studio"]
+)
 page = st.sidebar.radio(
     "WORKSPACE",
     ["Character Builder", "Characters", "Beats", "Flaw Arc"]
