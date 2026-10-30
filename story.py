@@ -232,11 +232,8 @@ Build characters, map character-driven beats, and write scene drafts.
 
 page = st.sidebar.radio(
     "WORKSPACE",
-    ["Character Builder", "Characters", "Beats Engine", "Flaw Arc", "Drafting Studio"]
-)
-page = st.sidebar.radio(
-    "WORKSPACE",
-    ["Character Builder", "Characters", "Beats", "Flaw Arc"]
+    ["Character Builder", "Characters", "Beats Engine", "Cost Arc", "Drafting Studio"],
+    key="nav_page"
 )
 
 if page == "Character Builder":
@@ -471,7 +468,7 @@ elif page == "Beats Engine":
 
                 for stage in stages:
                     with st.expander(f"{stage}"):
-                        # Guidance for stage definition
+                        
                         st.markdown(f"""
                         <div class="stage-guide">
                             <div class="stage-guide-title">What happens at this stage?</div>
@@ -479,7 +476,7 @@ elif page == "Beats Engine":
                         </div>
                         """, unsafe_allow_html=True)
 
-                        # Existing beats for stage
+                        
                         stage_beats = [b for b in st.session_state.beats if b["stage"] == stage]
                         for b in stage_beats:
                             badge_class = f"badge-{b['trait_type'].lower()}"
@@ -498,7 +495,6 @@ elif page == "Beats Engine":
                         st.markdown("---")
                         st.markdown("##### ➕ Add Beat to Stage")
 
-                        # Dynamic Form per Stage
                         with st.form(key=f"form_{stage}"):
                             chosen_name = st.selectbox("Who is taking action?", char_names, key=f"name_{stage}")
                             beat_title = st.text_input("What happens in this beat?", placeholder="e.g., Refuses the promotion offer", key=f"title_{stage}")
