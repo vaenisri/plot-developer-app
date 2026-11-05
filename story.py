@@ -139,6 +139,8 @@ section[data-testid="stSidebar"] {
 """, unsafe_allow_html=True)
 
 
+ 
+
 if "step" not in st.session_state:
     st.session_state.step = 0
 if "answers" not in st.session_state:
@@ -232,8 +234,8 @@ Build characters, map character-driven beats, and write scene drafts.
 
 page = st.sidebar.radio(
     "WORKSPACE",
-    ["Character Builder", "Characters", "Beats Engine", "Cost Arc", "Drafting Studio"],
-    key="nav_page"
+    ["Character Builder", "Characters", "Beats Engine", "Cost Arc", "Drafting Studio","Kids Studio 🚀"],
+    key="nav_page" 
 )
 
 if page == "Character Builder":
@@ -633,3 +635,92 @@ elif page == "Drafting Studio":
                 st.session_state.draft_text[selected_beat_str] = draft
                 st.success("Draft saved successfully!")
         
+elif page == "Kids Studio 🚀":
+    def render_kids_studio():
+    
+        st.markdown("""
+        <style>
+        .stApp { background-color: #FAF5EF; }
+        .kid-header {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            color: #4A3E3D;
+            text-align: center;
+            padding: 10px;
+        }
+        .card-flaw { background-color: #FFE5E5; border-left: 6px solid #FF5A5A; padding: 15px; border-radius: 8px; margin-bottom: 10px; }
+        .card-strength { background-color: #E5FFE9; border-left: 6px solid #4CAF50; padding: 15px; border-radius: 8px; margin-bottom: 10px; }
+        .card-external { background-color: #FFFDE5; border-left: 6px solid #FFC107; padding: 15px; border-radius: 8px; margin-bottom: 10px; }
+        </style>
+    """, unsafe_allow_html=True)
+    st.markdown("<h1 class='kid-header'>🚀 Story Hero Studio</h1>", unsafe_allow_html=True)
+    st.caption("Build awesome main characters and make sure *THEY* drive the adventure!")
+    st.divider()
+
+    # Step 1: Hero Setup
+    st.header("1. Build Your Hero 🦸‍♂️")
+    col1, col2 = st.columns(2)
+    with col1:
+        hero_name = st.text_input("What is your hero's name?", value="Leo")
+        superpower = st.text_input("⚡ Their Superpower / Best Quality", value="Super Fast & Super Brave")
+    with col2:
+        bad_habit = st.text_input("😈 Their Bad Habit (What gets them in trouble?)", value="Gets angry too fast")
+        wrong_idea = st.text_input("🧠 Their Wrong Idea (What do they believe that isn't true?)", value="I have to do everything alone")
+
+    st.divider()
+
+    # Step 2: Story Beats
+    st.header("2. Add Story Events 🎬")
+    if "kid_beats" not in st.session_state:
+        st.session_state.kid_beats = [
+            {"title": f"{hero_name} loses their temper and breaks a clue", "type": "Flaw"},
+            {"title": "A sudden thunderstorm strikes the neighborhood", "type": "External"},
+            {"title": f"{hero_name} trusts a friend and asks for help", "type": "Strength"}
+        ]
+
+    with st.form("add_beat_form", clear_on_submit=True):
+        beat_title = st.text_input("What happens next in the story?")
+        beat_type = st.radio(
+            "Why did this happen?",
+            ["Because of a Bad Habit / Mistake", "Because of a Superpower / Good Choice", "It was a Surprise / External Event"],
+            horizontal=True
+        )
+        submit = st.form_submit_button("➕ Add Story Event")
+
+        if submit and beat_title:
+            mapped_type = "Flaw" if "Bad Habit" in beat_type else ("Strength" if "Superpower" in beat_type else "External")
+            st.session_state.kid_beats.append({"title": beat_title, "type": mapped_type})
+            st.rerun()
+
+    # Step 3: Agency Meter
+    st.subheader("📊 Hero Agency Meter")
+    total_beats = len(st.session_state.kid_beats)
+    if total_beats > 0:
+        hero_beats = sum(1 for b in st.session_state.kid_beats if b["type"] in ["Flaw", "Strength"])
+        hero_percent = int((hero_beats / total_beats) * 100)
+        st.progress(hero_percent / 100)
+        
+        if hero_percent >= 66:
+            st.success(f"🌟 **{hero_percent}% Hero-Driven!** {hero_name} is totally in control of this story!")
+        elif hero_percent >= 40:
+            st.info(f"⚖️ **{hero_percent}% Hero-Driven!** Good balance of surprises and character choices.")
+        else:
+            st.warning(f"⚠️ **Only {hero_percent}% Hero-Driven!** Too many random surprises happen! Give {hero_name} more big choices.")
+
+    st.divider()
+
+    # Step 4: Display Cards
+    st.header("3. Your Story Cards 🃏")
+    for idx, beat in enumerate(st.session_state.kid_beats):
+        col_card, col_del = st.columns([6, 1])
+        with col_card:
+            if beat["type"] == "Flaw":
+                st.markdown(f"<div class='card-flaw'><b>😈 Bad Habit Beat #{idx+1}:</b> {beat['title']}</div>", unsafe_allow_html=True)
+            elif beat["type"] == "Strength":
+                st.markdown(f"<div class='card-strength'><b>⚡ Superpower Beat #{idx+1}:</b> {beat['title']}</div>", unsafe_allow_html=True)
+            else:
+                st.markdown(f"<div class='card-external'><b>⚡ Surprise Event #{idx+1}:</b> {beat['title']}</div>", unsafe_allow_html=True)
+        with col_del:
+            if st.button("❌", key=f"del_{idx}"):
+                st.session_state.kid_beats.pop(idx)
+                st.rerun()
+    render_kids_studio()  
