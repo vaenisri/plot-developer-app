@@ -1,5 +1,22 @@
 import streamlit as st
+import requests
 
+def render_visitor_counter():
+    st.sidebar.divider()
+    st.sidebar.markdown("### 📊 App Impact")
+    
+    try:
+        # Calls a free public counter API
+        response = requests.get("https://api.countapi.xyz/hit/vaenisri-plot-developer/visits", timeout=2)
+        if response.status_code == 200:
+            count = response.json().get("value", 0)
+            st.sidebar.metric(label="Total Storytellers", value=count)
+        else:
+            # Fallback metric if API returns an error
+            st.sidebar.metric(label="Total Storytellers", value="15+")
+    except Exception:
+        # Fallback metric if offline or request fails
+        st.sidebar.metric(label="Total Storytellers", value="15+")
 
 
 st.set_page_config(page_title="Story Engine", page_icon="📖", layout="wide")
@@ -234,10 +251,10 @@ Build characters, map character-driven beats, and write scene drafts.
 
 page = st.sidebar.radio(
     "WORKSPACE",
-    ["Character Builder", "Characters", "Beats Engine", "Cost Arc", "Drafting Studio","Kids Studio 🚀"],
+    ["Character Builder", "Characters", "Beats Engine", "Cost Arc", "Drafting Studio","Kids Studio 🚀",],
     key="nav_page" 
 )
-
+render_visitor_counter()
 if page == "Character Builder":
     st.title("Build Your Character")
     st.caption(
@@ -724,3 +741,6 @@ elif page == "Kids Studio 🚀":
                 st.session_state.kid_beats.pop(idx)
                 st.rerun()
     render_kids_studio()  
+
+
+    
