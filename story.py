@@ -1,23 +1,32 @@
 import streamlit as st
-import requests
+import json
+import os
 
 def render_visitor_counter():
     st.sidebar.divider()
     st.sidebar.markdown("### 📊 App Impact")
     
+    counter_file = "visitor_count.json"
+    
     try:
-        # Calls a free public counter API
-        response = requests.get("https://api.countapi.xyz/hit/vaenisri-plot-developer/visits", timeout=2)
-        if response.status_code == 200:
-            count = response.json().get("value", 0)
-            st.sidebar.metric(label="Total Storytellers", value=count)
+    
+        if os.path.exists(counter_file):
+            with open(counter_file, "r") as f:
+                data = json.load(f)
+                count = data.get("count", 15)
         else:
-            # Fallback metric if API returns an error
-            st.sidebar.metric(label="Total Storytellers", value="15+")
+            count = 15
+  
+        if "counted_visit" not in st.session_state:
+            count += 1
+            st.session_state["counted_visit"] = True
+            with open(counter_file, "w") as f:
+                json.dump({"count": count}, f)
+                
+        st.sidebar.metric(label="Total Storytellers", value=count)
     except Exception:
-        # Fallback metric if offline or request fails
+     
         st.sidebar.metric(label="Total Storytellers", value="15+")
-
 
 st.set_page_config(page_title="Story Engine", page_icon="📖", layout="wide")
 
