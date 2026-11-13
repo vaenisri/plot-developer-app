@@ -2,6 +2,7 @@ import streamlit as st
 import json
 import os
 
+st.info("👈 **Open the menu on the top-left** to switch between **Story Builder**, **Beats Engine**, and **Kids Studio 🚀**!") 
 def render_visitor_counter():
     st.sidebar.divider()
     st.sidebar.markdown("### 📊 App Impact")
@@ -28,8 +29,37 @@ def render_visitor_counter():
      
         st.sidebar.metric(label="Total Storytellers", value="15+")
 
-st.set_page_config(page_title="Story Engine", page_icon="📖", layout="wide")
+st.set_page_config(
+    page_title="Character-Driven Story Tool",
+    page_icon="✍️",
+    layout="wide",
+    initial_sidebar_state="expanded"  
+)
 
+st.markdown("""
+    <style>
+
+    [data-testid="stSidebar"] {
+        background-color: #F4ECE1;
+        border-right: 3px solid #D9C8B4;
+    }
+
+    [data-testid="stSidebarCollapsedControl"] {
+        background-color: #FF5A5A;
+        color: white;
+        border-radius: 0 12px 12px 0;
+        padding: 8px 12px;
+        transform: scale(1.3);
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    }
+
+    [data-testid="stSidebar"] .stRadio label {
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        padding: 6px 4px;
+    }
+    </style>
+""", unsafe_allow_html=True)
 st.markdown("""
 <style>
 body, .stApp {
