@@ -2,7 +2,7 @@ import streamlit as st
 import json
 import os
 
-st.info("👈 **Open the menu on the top-left** to switch between **Story Builder**, **Beats Engine**, and **Kids Studio 🚀**!") 
+
 def render_visitor_counter():
     st.sidebar.divider()
     st.sidebar.markdown("### 📊 App Impact")
@@ -288,6 +288,7 @@ Build characters, map character-driven beats, and write scene drafts.
 </p>
 """, unsafe_allow_html=True)
 
+st.info("👈 **Open the menu on the top-left** to switch between **Story Builder**, **Beats Engine**, and **Kids Studio 🚀**!") 
 page = st.sidebar.radio(
     "WORKSPACE",
     ["Character Builder", "Characters", "Beats Engine", "Cost Arc", "Drafting Studio","Kids Studio 🚀",],
